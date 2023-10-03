@@ -1,5 +1,5 @@
 "use client"
-import { useSession } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { ReactElement } from "react";
 
@@ -22,6 +22,9 @@ export default function User(): ReactElement {
     <div>
       <h1>Home</h1>
       {JSON.stringify(session)}
+
+      log out 
+      <button onClick={()=>signOut()}></button>
     </div>
   );
 }
