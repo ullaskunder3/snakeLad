@@ -27,8 +27,14 @@ Snake and Ladder is a web-based game built using Next.js, React, and Tailwind CS
 
 **Deployment:**
 - The game is currently deployed on Vercel, making it accessible for players to enjoy.
+- build failled
+
+|![alt text](./screenshot/1.png)|![alt text](./screenshot/2.png)   |
+|---|---|
+|![alt text](./screenshot/3.png)|![alt text](./screenshot/4.png)|
 
 **Future Plans:**
+- fix deployment (change auth google git url, api/ -fix)
 - Once Socket.io integration is complete, the game will be prepared for deployment on Railapp for a seamless multiplayer experience.
 
 Snake and Ladder is an exciting and visually appealing web game that combines classic gameplay with modern web technologies. Stay tuned for future updates and multiplayer gameplay!

@@ -25,6 +25,5 @@ export async function POST(request: { json: () => any; }){
             password: hashedPassword,
         }
     })
-    return NextResponse.json(newUser)
-
+    return NextResponse.json({newUser})
 }
