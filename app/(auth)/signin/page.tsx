@@ -10,24 +10,31 @@ export default function SignIn() {
     email: "",
     password: "",
   });
+  const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     if (session?.status === "authenticated") {
       router.push("/");
     }
   }, [router, session?.status]);
-  const onFormSubmit = async (event: { preventDefault: () => void }) => {
+  const onFormSubmit = async (event:any) => {
     event.preventDefault();
-    signIn("credentials", { ...formData, redirect: false })
-      .then((response) => {
-        if (response?.error) {
-          alert(response?.error);
-        }
-        if (response?.ok && !response.error) {
-          router.push("/")
-        }
-      })
-      .catch(() => alert("something went wrong"));
+    setLoading(true);
+    try {
+      const response = await signIn("credentials", { ...formData, redirect: false });
+  
+      if (response?.error) {
+        alert(response?.error);
+      } else if (response?.ok) {
+        router.push("/");
+      }
+    } catch (error) {
+      alert("Something went wrong");
+    } finally {
+      setLoading(false);
+    }
   };
+  
   return (
     <div className="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
       <div className="items-center max-w-screen-xl m-0 sm:m-10 bg-white shadow sm:rounded-lg flex justify-center flex-1">
@@ -100,6 +107,7 @@ export default function SignIn() {
                   onChange={(event) =>
                     setFormData({ ...formData, email: event.target.value })
                   }
+                  disabled={loading}
                   required
                 />
                 <input
@@ -110,22 +118,42 @@ export default function SignIn() {
                   onChange={(event) =>
                     setFormData({ ...formData, password: event.target.value })
                   }
+                  disabled={loading}
                   required
                 />
-                <button className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
-                  <svg
-                    className="w-6 h-6 -ml-2"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2" />
-                    <circle cx="8.5" cy="7" r="4" />
-                    <path d="M20 8v6M23 11h-6" />
-                  </svg>
-                  <span className="ml-">Log In</span>
+                <button disabled={loading} className="mt-5 tracking-wide font-semibold bg-green-400 text-white-500 w-full py-4 rounded-lg hover:bg-green-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none">
+                  {loading ? (
+                    <div className="w-9">
+                      <svg
+                        version="1.1"
+                        id="L9"
+                        xmlns="http://www.w3.org/2000/svg"
+                        xmlnsXlink="http://www.w3.org/1999/xlink"
+                        x="0px"
+                        y="0px"
+                        viewBox="0 0 100 100"
+                        enable-background="new 0 0 0 0"
+                        xmlSpace="preserve"
+                      >
+                        <path
+                          fill="#fff"
+                          d="M73,50c0-12.7-10.3-23-23-23S27,37.3,27,50 M30.9,50c0-10.5,8.5-19.1,19.1-19.1S69.1,39.5,69.1,50"
+                        >
+                          <animateTransform
+                            attributeName="transform"
+                            attributeType="XML"
+                            type="rotate"
+                            dur="1s"
+                            from="0 50 50"
+                            to="360 50 50"
+                            repeatCount="indefinite"
+                          />
+                        </path>
+                      </svg>
+                    </div>
+                  ) : (
+                    <span className="ml-">Log In</span>
+                  )}
                 </button>
               </form>
             </div>

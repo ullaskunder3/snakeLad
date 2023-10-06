@@ -25,5 +25,5 @@ export async function POST(request: NextRequest) {
             password: hashedPassword,
         }
     });
-    return NextResponse.json({ newUser });
+    return NextResponse.json(newUser);
 }
