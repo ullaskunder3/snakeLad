@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Board from "./Board";
+import { clearGameState, loadGameState, saveGameState } from "./storage";
 
 const SNAKES: any = {
   8: 4,
@@ -48,6 +49,8 @@ const SnakeAndLadder = () => {
 
   const snakeBite: any = ["boohoo", "bummer", "snake bite", "oh no", "dang"];
 
+  const GAME_STATE_KEY = "snakeAndLadderGameState"; // Key for local storage
+
   const ladderJump: any = [
     "woohoo",
     "woww",
@@ -57,11 +60,38 @@ const SnakeAndLadder = () => {
   ];
 
   useEffect(() => {
+    // Load game state from local storage when component mounts
+    const savedGameState = loadGameState(GAME_STATE_KEY);
+    if (savedGameState) {
+      setNumPlayers(savedGameState.numPlayers);
+      setPlayerNames(savedGameState.playerNames);
+      setPlayerPositions(savedGameState.playerPositions);
+      setCurrentPlayer(savedGameState.currentPlayer);
+      setDiceValue(savedGameState.diceValue);
+      setIsRollDiceDisabled(savedGameState.isRollDiceDisabled);
+    }
+
+    return () => {
+      // Clear game state from local storage when component unmounts
+      clearGameState(GAME_STATE_KEY);
+    };
+  }, []);
+
+  useEffect(() => {
+    saveGameState(GAME_STATE_KEY, {
+      numPlayers,
+      playerNames,
+      playerPositions,
+      currentPlayer,
+      diceValue,
+      isRollDiceDisabled,
+    });
     if (playerPositions.some((position) => position >= 100)) {
       alert(`${playerNames[currentPlayer - 1]} won the game!`);
       resetGame();
+      clearGameState(GAME_STATE_KEY);
     }
-  }, [playerPositions, currentPlayer, playerNames]);
+  }, [playerPositions, currentPlayer, playerNames, numPlayers, diceValue, isRollDiceDisabled]);
 
   const resetGame = () => {
     setPlayerNames([]);
@@ -81,12 +111,12 @@ const SnakeAndLadder = () => {
     if (newPosition in SNAKES) {
       const snakeBiteMsg =
         snakeBite[Math.floor(Math.random() * snakeBite.length)];
-      alert(`Snake bite! ${snakeBiteMsg}`);
+      alert(`${playerNames[currentPlayer - 1]} Snake bite! ${snakeBiteMsg}`);
       newPlayerPositions[currentPlayer - 1] = SNAKES[newPosition];
     } else if (newPosition in LADDERS) {
       const ladderJumpMsg =
         ladderJump[Math.floor(Math.random() * ladderJump.length)];
-      alert(`Climbed a ladder! ${ladderJumpMsg}`);
+      alert(`${playerNames[currentPlayer - 1]} Climbed a ladder! ${ladderJumpMsg}`);
       newPlayerPositions[currentPlayer - 1] = LADDERS[newPosition];
     }
 
@@ -102,7 +132,6 @@ const SnakeAndLadder = () => {
     setPlayerNames(Array(num).fill(""));
     setPlayerPositions(Array(num).fill(0));
     setIsRollDiceDisabled(false);
-
   };
 
   const renderPlayerInputs = () => {
@@ -114,7 +143,7 @@ const SnakeAndLadder = () => {
               Player {index + 1} Name:
             </label>
             <input
-              className="bg-slate-400/90 min-h-[auto] rounded border-0 px-3 py-[0.32rem] leading-[1.6] outline-none transition-all duration-200 ease-linear focus:placeholder:opacity-100 peer-focus:text-primary data-[te-input-state-active]:placeholder:opacity-100 motion-reduce:transition-none dark:text-neutral-200 dark:placeholder:text-neutral-200 dark:peer-focus:text-primary [&:not([data-te-input-placeholder-active])]:placeholder:opacity-0"
+              className="h-10 w-full rounded-md bg-blue-400/20 px-4 font-thin outline-none drop-shadow-sm transition-all duration-200 ease-in-out focus:bg-white focus:ring-2 focus:ring-blue-400"
               type="text"
               value={playerNames[index] || ""}
               onChange={(e) => {
@@ -140,14 +169,14 @@ const SnakeAndLadder = () => {
   };
 
   return (
-    <div className="h-screen flex items-center justify-around">
-      <div>
+    <div className="main h-[90vh] flex items-center justify-evenly">
+      <div className="px-4">
         <div className="flex items-center">
-          <label className="mr-2 py-5">Select Number of Players (2-4):</label>
+          <label className="mr-2 py-5">Select Number of Players (1-4):</label>
           <input
-            className="outline-1 outline outline-black py-2 w-20"
+            className="outline-1 outline outline-blue-400 py-1 w-20"
             type="number"
-            min="2"
+            min="1"
             max="4"
             value={numPlayers}
             onChange={handleNumPlayersChange}
@@ -156,18 +185,20 @@ const SnakeAndLadder = () => {
 
         {numPlayers > 0 && renderPlayerInputs()}
         <div>
-          <div>
+          <div className="flex justify-between">
+            <div>
             <p className="py-3">
               {playerNames[currentPlayer - 1] &&
                 `${playerNames[currentPlayer - 1]}'s trurn`}{" "}
             </p>
             <p>Dice Roll: {diceValue}</p>
+            </div>
             <div>
               {playerNames.map(
                 (name, index) =>
                   name && (
                     <p key={index}>
-                      {name}: {playerPositions[index]}
+                      {playerColors[index].charAt(0).toUpperCase()}-{name}: {playerPositions[index]}
                     </p>
                   )
               )}

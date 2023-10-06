@@ -23,7 +23,6 @@ body {
   margin: 0;
   padding: 0;
 }
-/* App.css */
 
 /* Styling for the board */
 .board {
@@ -33,6 +32,45 @@ body {
   width: 500px;
   height: 500px;
   border: 2px solid #333;
+
+  transform-style: preserve-3d;
+  transform: perspective(800px) rotateX(30deg);
+  transform-origin: center bottom;
+  position: relative;
+  border-radius: 20px;
+  box-shadow: 0px 15px 10px -15px #111;
+}
+
+@media (max-width: 600px) {
+  .main {
+    flex-direction: column;
+  }
+
+  .board {
+    width: 350px;
+    height: 350px;
+    transform: perspective(500px) rotateX(20deg);
+  }
+
+  .cell {
+    font-size: 10px;
+  }
+}
+
+.board .cell:first-child {
+  border-top-left-radius: 20px;
+}
+
+.board .cell:nth-child(10) {
+  border-top-right-radius: 20px;
+}
+
+.board .cell:nth-child(91) {
+  border-bottom-left-radius: 20px;
+}
+
+.board .cell:last-child {
+  border-bottom-right-radius: 20px;
 }
 
 .cell {
@@ -42,17 +80,40 @@ body {
   font-weight: bold;
   border: 1px solid #ccc;
   background-color: #fff;
+
+  position: relative;
+  transition: transform 0.3s ease-in-out;
+
+}
+
+.cell:has(> .player-1, > .player-2, > .player-3, > .player-4) {
+  transform: translateZ(25px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
 .snake {
-  border: 1px dotted red; /* Styling for snake cells */
+  border: 1px solid red;
+  background-color: #ff00003f;
 }
 
 .ladder {
-  border: 1px dotted gray; /* Styling for ladder cells */
+  border: 1px solid #008a7e;
+  background-color: #008a7e52;
 }
 
 /* Styling for players */
+.player-1,
+.player-2,
+.player-3,
+.player-4 {
+  position: absolute;
+  border-radius: 50%;
+  width: .9rem;
+  height: .9rem;
+  text-align: center;
+  line-height: normal;
+}
+
 .player-1 {
   background-color: red;
   color: white;
