@@ -14,8 +14,10 @@ Snake and Ladder is a web-based game built using Next.js, React, and Tailwind CS
 2. **Solo Gameplay:**
    - Enjoy a classic Snake and Ladder game in a solo player mode.
    - Roll the dice and make strategic moves to win the game.
+3. **Game State**
+   - Local storage is used to save current game play
 
-3. **Unique User Interface:**
+4. **Unique User Interface:**
    - The game features a distinctive and visually appealing user interface, designed with Tailwind CSS.
    - Smooth animations and responsive design enhance the gaming experience.
 
@@ -29,11 +31,15 @@ Snake and Ladder is a web-based game built using Next.js, React, and Tailwind CS
 - The game is currently deployed on Vercel, making it accessible for players to enjoy.
 - build failled
 
-|![alt text](./screenshot/1.png)|![alt text](./screenshot/2.png)   |
+|![alt text](./screenshot/1.png)|![alt text](./screenshot/2.png)|
 |---|---|
 |![alt text](./screenshot/3.png)|![alt text](./screenshot/4.png)|
+|---|---|
+|![alt text](./screenshot/5.png)||
 
 **Future Plans:**
+- Code cleanup
+- Abstraction
 - fix deployment (change auth google git url, api/ -fix)
 - Once Socket.io integration is complete, the game will be prepared for deployment on Railapp for a seamless multiplayer experience.
 
